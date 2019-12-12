@@ -1,8 +1,15 @@
-//
-// Created by Antony Peacock on 11/12/2019.
-//
+#ifndef LINEAR_ALGEBRA_SIMD_HPP
+#define LINEAR_ALGEBRA_SIMD_HPP
 
-#ifndef LINEAR_ALGEBRA_SIMD_LINEAR_ALGEBRA_SIMD_HPP
-#define LINEAR_ALGEBRA_SIMD_LINEAR_ALGEBRA_SIMD_HPP
+#pragma once
 
-#endif //LINEAR_ALGEBRA_SIMD_LINEAR_ALGEBRA_SIMD_HPP
+namespace linear_algebra {
+
+class vector4 {
+public:
+
+};
+
+} // namespace linear_algebra
+
+#endif // LINEAR_ALGEBRA_SIMD_HPP
