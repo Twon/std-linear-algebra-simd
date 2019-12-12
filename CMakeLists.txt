@@ -29,7 +29,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ${LINEAR_ALGEBRA_SIMD_PREDEFINED_TARGETS})
 
 # Project includes
-#include(Documentation)
+include(Documentation)
 
 # Ensure code coverage is switched off for Mac OS until the code coverage library addresses the AppleClang issue
 cmake_dependent_option(ENABLE_CODE_COVERAGE "Enable code coverage" ON "\"${CMAKE_CXX_COMPILER_ID}\" STREQUAL \"Clang\" OR \"${CMAKE_CXX_COMPILER_ID}\" STREQUAL \"GNU\"" OFF)
