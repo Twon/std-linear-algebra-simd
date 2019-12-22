@@ -7,14 +7,15 @@ if(ENABLE_BUILD_DOCUMENTATION)
         message(FATAL_ERROR "Doxygen is needed to build the documentation.")
     endif()
 
-    set(DOXYGEN_PROJECT_NAME "std::experimental::simd")
+    set(DOXYGEN_PROJECT_NAME "linear_algebra_simd")
     set(DOXYGEN_EXTENSION_MAPPING "no_extension=C++")
 
     doxygen_add_docs(Documentation
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ALL
         WORKING_DIRECTORY
-            ${PROJECT_SOURCE_DIR}/experimental/
+            ${PROJECT_SOURCE_DIR}/include
         COMMENT
             "Generating API documentation with Doxygen"
     )

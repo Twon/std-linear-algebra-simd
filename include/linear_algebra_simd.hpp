@@ -3,13 +3,8 @@
 
 #pragma once
 
-namespace linear_algebra {
-
-class vector4 {
-public:
-
-};
-
-} // namespace linear_algebra
+#include <matrix_simd.hpp>
+#include <quaternion_simd.hpp>
+#include <vector_simd.hpp>
 
 #endif // LINEAR_ALGEBRA_SIMD_HPP

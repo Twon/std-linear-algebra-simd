@@ -1,7 +1,5 @@
 @PACKAGE_INIT@
 
-set_and_check(CPP_INDIRECT_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
-
 check_required_components(linear_algebra_simd)
 
 if(NOT TARGET linear_algebra_simd::linear_algebra_simd)
