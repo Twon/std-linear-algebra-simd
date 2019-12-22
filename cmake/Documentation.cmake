@@ -13,6 +13,7 @@ if(ENABLE_BUILD_DOCUMENTATION)
     doxygen_add_docs(Documentation
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ALL
         WORKING_DIRECTORY
             ${PROJECT_SOURCE_DIR}/include
         COMMENT

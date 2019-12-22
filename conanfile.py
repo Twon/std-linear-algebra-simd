@@ -9,7 +9,7 @@ class LinearAlgebraSimdConan(ConanFile):
     url = "https://github.com/Twon/std-linear-algebra-simd"
     description = "An linear algebra library implemented using standard library simd data types"
     topics = ("conan", "linear algebra", "header-only", "std", "experimental", "simd")
-    exports_sources = "*.txt", "*.h", "*.natvis", "*.cpp", "*.cmake", "*.cmake.in", "LICENSE.txt"
+    exports_sources = "*.txt", "*.hpp", "*.natvis", "*.cpp", "*.cmake", "*.cmake.in", "LICENSE.txt"
     generators = "cmake"
     requires = "Catch2/2.10.2@catchorg/stable"
 

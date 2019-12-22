@@ -40,7 +40,7 @@ target_include_directories(linear_algebra_simd
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:{CMAKE_INSTALL_INCLUDEDIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_sources(linear_algebra_simd
@@ -49,10 +49,10 @@ target_sources(linear_algebra_simd
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/matrix_simd.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/quaternion_simd.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/vector_simd.hpp>
-        $<INSTALL_INTERFACE:{CMAKE_INSTALL_INCLUDEDIR}/include/linear_algebra_simd.hpp>
-        $<INSTALL_INTERFACE:{CMAKE_INSTALL_INCLUDEDIR}/include/matrix_simd.hpp>
-        $<INSTALL_INTERFACE:{CMAKE_INSTALL_INCLUDEDIR}/include/quaternion_simd.hpp>
-        $<INSTALL_INTERFACE:{CMAKE_INSTALL_INCLUDEDIR}/include/vector_simd.hpp>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/linear_algebra_simd.hpp>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/matrix_simd.hpp>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/quaternion_simd.hpp>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/vector_simd.hpp>
 )
 
 target_compile_features(linear_algebra_simd
@@ -64,7 +64,7 @@ target_compile_features(linear_algebra_simd
 add_library(linear_algebra_simd::linear_algebra_simd ALIAS linear_algebra_simd)
 
 write_compiler_detection_header(
-    FILE linear_algebra_simd_compiler_detection.h
+    FILE linear_algebra_simd_compiler_detection.hpp
     PREFIX LINEAR_ALGEBRA_SIMD
     COMPILERS GNU Clang MSVC Intel AppleClang
     FEATURES cxx_constexpr
@@ -146,7 +146,7 @@ if(LINEAR_ALGEBRA_SIMD_IS_NOT_SUBPROJECT)
 # Hierarchically copy headers to the install dir
 install (
     DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/"
     DESTINATION
         ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN
@@ -155,8 +155,8 @@ install (
 
 install(
     FILES
-        "${CMAKE_CURRENT_SOURCE_DIR}/linear_algebra_simd_export.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/linear_algebra_simd_compiler_detection.h"
+#        "${CMAKE_CURRENT_SOURCE_DIR}/linear_algebra_simd_export.hpp
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear_algebra_simd_compiler_detection.hpp"
     DESTINATION
         ${CMAKE_INSTALL_INCLUDEDIR}
 )
