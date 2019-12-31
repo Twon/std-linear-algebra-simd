@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <linear_algebra.hpp>
 #include <matrix_simd.hpp>
 #include <quaternion_simd.hpp>
 #include <vector_simd.hpp>

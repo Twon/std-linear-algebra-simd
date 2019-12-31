@@ -12,6 +12,11 @@ project(linear_algebra_simd
     LANGUAGES CXX
 )
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/conanbuildinfo.cmake)
+    include(${CMAKE_SOURCE_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
+endif()
+
 # Include necessary submodules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -34,6 +39,16 @@ include(Documentation)
 # Ensure code coverage is switched off for Mac OS until the code coverage library addresses the AppleClang issue
 cmake_dependent_option(ENABLE_CODE_COVERAGE "Enable code coverage" ON "\"${CMAKE_CXX_COMPILER_ID}\" STREQUAL \"Clang\" OR \"${CMAKE_CXX_COMPILER_ID}\" STREQUAL \"GNU\"" OFF)
 
+FetchContent_Declare(
+    linear_algebra
+    GIT_REPOSITORY https://github.com/BobSteagall/wg21.git
+)
+
+FetchContent_GetProperties(linear_algebra)
+if(NOT linear_algebra_POPULATED)
+    FetchContent_Populate(linear_algebra)
+    add_subdirectory(${linear_algebra_SOURCE_DIR}/linear_algebra/code ${linear_algebra_BINARY_DIR})
+endif()
 
 add_library(linear_algebra_simd INTERFACE)
 target_include_directories(linear_algebra_simd
@@ -53,6 +68,11 @@ target_sources(linear_algebra_simd
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/matrix_simd.hpp>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/quaternion_simd.hpp>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/vector_simd.hpp>
+)
+
+target_link_libraries(linear_algebra_simd
+    INTERFACE
+        wg21_linear_algebra::wg21_linear_algebra
 )
 
 target_compile_features(linear_algebra_simd
@@ -86,6 +106,18 @@ if(LINEAR_ALGEBRA_SIMD_IS_NOT_SUBPROJECT)
         if(NOT catch2_POPULATED)
             FetchContent_Populate(catch2)
             add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR})
+        endif()
+
+        FetchContent_Declare(
+            rapidcheck
+            GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
+        )
+
+        FetchContent_GetProperties(rapidcheck)
+        if(NOT rapidcheck_POPULATED)
+            FetchContent_Populate(rapidcheck)
+            add_subdirectory(${rapidcheck_SOURCE_DIR} ${rapidcheck_BINARY_DIR})
+            #FetchContent_MakeAvailable(rapidcheck)
         endif()
 
         add_executable(test_linear_algebra_simd "")
