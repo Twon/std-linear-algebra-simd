@@ -1,7 +1,3 @@
-//
-// Created by Antony Peacock on 20/12/2019.
-//
-
 #ifndef LINEAR_ALGEBRA_SIMD_VECTOR_SIMD_HPP
 #define LINEAR_ALGEBRA_SIMD_VECTOR_SIMD_HPP
 
