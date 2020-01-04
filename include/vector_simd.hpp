@@ -75,7 +75,7 @@ namespace linear_algebra {
         //alignas(16)
         union {
             float data[4];
-            std::experimental::parallelism_v2::fixed_size_simd<float, 4> ma_elems;
+            storage_type ma_elems;
         };
     };
 
@@ -83,12 +83,6 @@ namespace linear_algebra {
     :   ma_elems()
     {
     }
-
-/*    constexpr fs_vector4f_simd_engine::fs_vector4f_simd_engine(const typename fs_vector4f_simd_engine::storage_type value)
-    :   ma_elems(value)
-    {
-    }*/
-
 
     template<class U>
     inline constexpr fs_vector4f_simd_engine::fs_vector4f_simd_engine(std::initializer_list<U> list)
@@ -100,9 +94,7 @@ namespace linear_algebra {
     inline constexpr typename fs_vector4f_simd_engine::const_reference
     fs_vector4f_simd_engine::operator ()(index_type i) const
     {
-        //auto first = reinterpret_cast<const_pointer>(&ma_elems);
         return data[i];
-//        return ma_elems[i];
     }
 
     inline constexpr typename fs_vector4f_simd_engine::const_iterator
@@ -138,7 +130,6 @@ namespace linear_algebra {
     inline constexpr typename fs_vector4f_simd_engine::reference
     fs_vector4f_simd_engine::operator ()(index_type i)
     {
-        //auto first = reinterpret_cast<pointer>(&ma_elems);
         return data[i];
     }
 
@@ -173,7 +164,7 @@ namespace linear_algebra {
     }
 
     /// Alias for a fixed size vector type implemented using simd instructions.
-    using vector4 = STD_LA::vector<fs_vector4f_simd_engine>;
+    using vector4f = STD_LA::vector<fs_vector4f_simd_engine>;
 
 } // namespace linear_algebra
 

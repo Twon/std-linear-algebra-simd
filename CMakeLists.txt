@@ -17,6 +17,8 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
 endif()
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Include necessary submodules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
