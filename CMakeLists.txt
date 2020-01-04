@@ -17,6 +17,8 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
 endif()
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Include necessary submodules
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -50,11 +52,23 @@ if(NOT linear_algebra_POPULATED)
     add_subdirectory(${linear_algebra_SOURCE_DIR}/linear_algebra/code ${linear_algebra_BINARY_DIR})
 endif()
 
+FetchContent_Declare(
+    std_simd
+    GIT_REPOSITORY https://github.com/VcDevel/std-simd.git
+)
+
+FetchContent_GetProperties(std_simd)
+if(NOT std_simd_POPULATED)
+    FetchContent_Populate(std_simd)
+#    add_subdirectory(${std_simd_SOURCE_DIR} ${std_simd_BINARY_DIR})
+endif()
+
 add_library(linear_algebra_simd INTERFACE)
 target_include_directories(linear_algebra_simd
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<BUILD_INTERFACE:${std_simd_SOURCE_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
@@ -62,11 +76,9 @@ target_sources(linear_algebra_simd
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/linear_algebra_simd.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/matrix_simd.hpp>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/quaternion_simd.hpp>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/vector_simd.hpp>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/linear_algebra_simd.hpp>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/matrix_simd.hpp>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/quaternion_simd.hpp>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/vector_simd.hpp>
 )
 
