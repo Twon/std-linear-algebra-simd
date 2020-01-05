@@ -144,10 +144,7 @@ namespace linear_algebra {
     {
         if (&rhs != this) return;
 
-        for (index_type i = 0;  i < 4*4;  ++i)
-        {
-            ma_elems[i] = rhs.ma_elems[i];
-        }
+        ma_elems = rhs.ma_elems;
     }
 
     template<class ET2> inline constexpr void
@@ -297,9 +294,12 @@ struct matrix_negation_engine_traits<matrix_operation_traits, linear_algebra::fs
 };
 
 template<>
-auto
-matrix_negation_traits<matrix_operation_traits, matrix<linear_algebra::fs_matrix4f_simd_engine>>::negate
-(matrix<linear_algebra::fs_matrix4f_simd_engine> const& m) -> result_type
+auto matrix_negation_traits<
+        matrix_operation_traits,
+        matrix<linear_algebra::fs_matrix4f_simd_engine>
+    >::negate(
+            matrix<linear_algebra::fs_matrix4f_simd_engine> const& m
+        ) -> result_type
 {
 	PrintOperandTypes<result_type>("matrix4x4f negation_traits", m);
 
@@ -318,14 +318,13 @@ struct matrix_multiplication_engine_traits<matrix_operation_traits, linear_algeb
 };
 
 template<>
-auto
-matrix_multiplication_traits<matrix_operation_traits, matrix<linear_algebra::fs_matrix4f_simd_engine>, float>::multiply
+auto matrix_multiplication_traits<matrix_operation_traits, matrix<linear_algebra::fs_matrix4f_simd_engine>, float>::multiply
 (matrix<linear_algebra::fs_matrix4f_simd_engine> const& m, float const& s) -> result_type
 {
 	PrintOperandTypes<result_type>("matrix4x4f multiplication_traits (m*s)", m, s);
 
-    linear_algebra::fs_vector4f_simd_engine::storage_type lhs(&m(0, 0), std::experimental::parallelism_v2::vector_aligned);
-    linear_algebra::fs_vector4f_simd_engine::storage_type result = lhs * s;
+    linear_algebra::fs_matrix4f_simd_engine::storage_type lhs(&m(0, 0), std::experimental::parallelism_v2::vector_aligned);
+    linear_algebra::fs_matrix4f_simd_engine::storage_type result = lhs * s;
     initializer_list<float> initialiser = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     result.copy_to(const_cast<float*>(initialiser.begin()), std::experimental::parallelism_v2::element_aligned);
     return result_type(initialiser);
@@ -339,31 +338,39 @@ struct matrix_multiplication_engine_traits<matrix_operation_traits, detail::elem
 };
 
 template<>
-auto
-matrix_multiplication_traits<matrix_operation_traits, float, matrix<linear_algebra::fs_matrix4f_simd_engine>>::multiply
-(float const& s, matrix<linear_algebra::fs_matrix4f_simd_engine> const& m) -> result_type
+auto matrix_multiplication_traits<
+        matrix_operation_traits, float,
+        matrix<linear_algebra::fs_matrix4f_simd_engine>
+    >::multiply(
+            float const& s,
+            matrix<linear_algebra::fs_matrix4f_simd_engine> const& m
+        ) -> result_type
 {
 	PrintOperandTypes<result_type>("matrix4x4f multiplication_traits (s*m)", s, m);
 
-    linear_algebra::fs_vector4f_simd_engine::storage_type lhs(&m(0, 0), std::experimental::parallelism_v2::vector_aligned);
-    // Appears to be adding the results not multiplying???
-    linear_algebra::fs_vector4f_simd_engine::storage_type result = lhs * s;
+    linear_algebra::fs_matrix4f_simd_engine::storage_type lhs(&m(0, 0), std::experimental::parallelism_v2::vector_aligned);
+    linear_algebra::fs_matrix4f_simd_engine::storage_type result = lhs * s;
     initializer_list<float> initialiser = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
     result.copy_to(const_cast<float*>(initialiser.begin()), std::experimental::parallelism_v2::element_aligned);
     return result_type(initialiser);
 }
-/*
+
 template<>
 struct matrix_multiplication_engine_traits<matrix_operation_traits, linear_algebra::fs_vector4f_simd_engine, linear_algebra::fs_matrix4f_simd_engine>
 {
 	using element_type = float;
-	using engine_type  = linear_algebra::fs_matrix4f_simd_engine;
+	using engine_type  = linear_algebra::fs_vector4f_simd_engine;
 };
 
 template<>
-auto
-matrix_multiplication_traits<matrix_operation_traits, vector<linear_algebra::fs_vector4f_simd_engine>, matrix<linear_algebra::fs_matrix4f_simd_engine>>::multiply
-(vector<linear_algebra::fs_vector4f_simd_engine> const& v, matrix<linear_algebra::fs_matrix4f_simd_engine> const& m) -> result_type
+auto matrix_multiplication_traits<
+        matrix_operation_traits,
+        vector<linear_algebra::fs_vector4f_simd_engine>,
+        matrix<linear_algebra::fs_matrix4f_simd_engine>
+    >::multiply(
+            vector<linear_algebra::fs_vector4f_simd_engine> const& v,
+            matrix<linear_algebra::fs_matrix4f_simd_engine> const& m
+        ) -> result_type
 {
 	PrintOperandTypes<result_type>("matrix4x4f multiplication_traits (v*m)", v, m);
 
@@ -381,9 +388,14 @@ struct matrix_multiplication_engine_traits<matrix_operation_traits, linear_algeb
 };
 
 template<>
-auto
-matrix_multiplication_traits<matrix_operation_traits, matrix<linear_algebra::fs_matrix4f_simd_engine>, vector<linear_algebra::fs_vector4f_simd_engine>>::multiply
-(matrix<linear_algebra::fs_matrix4f_simd_engine> const& m, vector<linear_algebra::fs_vector4f_simd_engine> const& v) -> result_type
+auto matrix_multiplication_traits<
+    matrix_operation_traits,
+    matrix<linear_algebra::fs_matrix4f_simd_engine>,
+    vector<linear_algebra::fs_vector4f_simd_engine>
+>::multiply(
+        matrix<linear_algebra::fs_matrix4f_simd_engine> const& m,
+        vector<linear_algebra::fs_vector4f_simd_engine> const& v
+    ) -> result_type
 {
 	PrintOperandTypes<result_type>("matrix4x4f multiplication_traits (m*v)", m, v);
 
@@ -393,7 +405,6 @@ matrix_multiplication_traits<matrix_operation_traits, matrix<linear_algebra::fs_
 						(m(3, 0) * v(0)) + (m(3, 1) * v(1)) + (m(3, 2) * v(2)) + (m(3, 3) * v(3)) };
 }
 
-
 template<>
 struct matrix_multiplication_engine_traits<matrix_operation_traits, linear_algebra::fs_matrix4f_simd_engine, linear_algebra::fs_matrix4f_simd_engine>
 {
@@ -402,17 +413,23 @@ struct matrix_multiplication_engine_traits<matrix_operation_traits, linear_algeb
 };
 
 template<>
-auto matrix_multiplication_traits<matrix_operation_traits, matrix<linear_algebra::fs_matrix4f_simd_engine>, matrix<linear_algebra::fs_matrix4f_simd_engine>>::multiply
-(matrix<linear_algebra::fs_matrix4f_simd_engine> const& m1, matrix<linear_algebra::fs_matrix4f_simd_engine> const& m2) -> result_type
+auto matrix_multiplication_traits<
+    matrix_operation_traits,
+    matrix<linear_algebra::fs_matrix4f_simd_engine>,
+    matrix<linear_algebra::fs_matrix4f_simd_engine>
+>::multiply(
+        matrix<linear_algebra::fs_matrix4f_simd_engine> const& m1,
+        matrix<linear_algebra::fs_matrix4f_simd_engine> const& m2
+    ) -> result_type
 {
-	PrintOperandTypes<result_type>("float22 multiplication_traits (m*m)", m1, m2);
+	PrintOperandTypes<result_type>("matrix4x4f multiplication_traits (m*m)", m1, m2);
 
 	return result_type{ (m1(0, 0) * m2(0, 0)) + (m1(0, 1) * m2(1, 0)) + (m1(0, 2) * m2(2, 0)) + (m1(0, 3) * m2(3, 0)), (m1(0, 0) * m2(0, 1)) + (m1(0, 1) * m2(1, 1)) + (m1(0, 2) * m2(2, 1)) + (m1(0, 3) * m2(3, 1)), (m1(0, 0) * m2(0, 2)) + (m1(0, 1) * m2(1, 2)) + (m1(0, 2) * m2(2, 2)) + (m1(0, 3) * m2(3, 2)), (m1(0, 0) * m2(0, 3)) + (m1(0, 1) * m2(1, 3)) + (m1(0, 2) * m2(2, 3)) + (m1(0, 3) * m2(3, 3)),
 						(m1(1, 0) * m2(0, 0)) + (m1(1, 1) * m2(1, 0)) + (m1(1, 2) * m2(2, 0)) + (m1(1, 3) * m2(3, 0)), (m1(1, 0) * m2(0, 1)) + (m1(1, 1) * m2(1, 1)) + (m1(1, 2) * m2(2, 1)) + (m1(1, 3) * m2(3, 1)), (m1(1, 0) * m2(0, 2)) + (m1(1, 1) * m2(1, 2)) + (m1(1, 2) * m2(2, 2)) + (m1(1, 3) * m2(3, 2)), (m1(1, 0) * m2(0, 3)) + (m1(1, 1) * m2(1, 3)) + (m1(1, 2) * m2(2, 3)) + (m1(1, 3) * m2(3, 3)),
 						(m1(2, 0) * m2(0, 0)) + (m1(2, 1) * m2(1, 0)) + (m1(2, 2) * m2(2, 0)) + (m1(2, 3) * m2(3, 0)), (m1(2, 0) * m2(0, 1)) + (m1(2, 1) * m2(1, 1)) + (m1(2, 2) * m2(2, 1)) + (m1(2, 3) * m2(3, 1)), (m1(2, 0) * m2(0, 2)) + (m1(2, 1) * m2(1, 2)) + (m1(2, 2) * m2(2, 2)) + (m1(2, 3) * m2(3, 2)), (m1(2, 0) * m2(0, 3)) + (m1(2, 1) * m2(1, 3)) + (m1(2, 2) * m2(2, 3)) + (m1(2, 3) * m2(3, 3)),
 						(m1(3, 0) * m2(0, 0)) + (m1(3, 1) * m2(1, 0)) + (m1(3, 2) * m2(2, 0)) + (m1(3, 3) * m2(3, 0)), (m1(3, 0) * m2(0, 1)) + (m1(3, 1) * m2(1, 1)) + (m1(3, 2) * m2(2, 1)) + (m1(3, 3) * m2(3, 1)), (m1(3, 0) * m2(0, 2)) + (m1(3, 1) * m2(1, 2)) + (m1(3, 2) * m2(2, 2)) + (m1(3, 3) * m2(3, 2)), (m1(3, 0) * m2(0, 3)) + (m1(3, 1) * m2(1, 3)) + (m1(3, 2) * m2(2, 3)) + (m1(3, 3) * m2(3, 3)) };
 }
-*/
+
 } // namespace STD_LA
 
 

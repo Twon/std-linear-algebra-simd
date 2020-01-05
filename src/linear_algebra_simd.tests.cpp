@@ -19,7 +19,7 @@ constexpr bool static_test()
     return B;
 }
 
-/*
+
 TEST_CASE("Test SIMD vector operations", "[linear_algebra.vector.simd.operators]")
 {
     GIVEN("A pair of vectors")
@@ -74,7 +74,7 @@ TEST_CASE("Test SIMD vector operations", "[linear_algebra.vector.simd.operators]
             }
         }
     }
-}*/
+}
 
 TEST_CASE("Test matrix operators", "[linear_algebra.matrix4.operators]")
 {
@@ -138,7 +138,7 @@ TEST_CASE("Test matrix operators", "[linear_algebra.matrix4.operators]")
                 REQUIRE(result == expected);
             }
         }
-        WHEN("Performing multiplication of a matrix and a vector")
+        WHEN("Performing multiplication of a scalar and a matrix")
         {
             matrix4x4f result = scalar * a;
             THEN("Expect element wise scaling of values")
@@ -150,23 +150,53 @@ TEST_CASE("Test matrix operators", "[linear_algebra.matrix4.operators]")
                 REQUIRE(result == expected);
             }
         }
-/*        WHEN("Performing addition of matrices")
+        WHEN("Performing multiplication of a matrix and a vector")
         {
-            vector4f result = a * scalar;
-            THEN("Expect element wise subtraction of values")
+            vector4f v = { 0.0f, 0.0f, 0.0f, 1.0f};
+            matrix4x4f m {  1.0f, 0.0f, 0.0f, 10.0f,
+                            0.0f, 1.0f, 0.0f, 10.0f,
+                            0.0f, 0.0f, 1.0f, 10.0f,
+                            0.0f, 0.0f, 0.0f, 1.0f};
+            vector4f result = m * v;
+            THEN("Expect translated position of a homogeneous vector")
             {
-                vector4f expected = {2.0f, 4.0f, 6.0f, 8.0f};
+                vector4f expected = {10.0f, 10.0f, 10.0f, 1.0f};
                 REQUIRE(result == expected);
             }
         }
-        WHEN("Performing addition of matrices")
+        WHEN("Performing multiplication of a vector and a matrix")
         {
-            vector4f result = scalar * a;
-            THEN("Expect element wise negation of values")
+            vector4f v = { 0.0f, 0.0f, 0.0f, 1.0f};
+            matrix4x4f m {  1.0f, 0.0f, 0.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f, 0.0f,
+                            10.0f, 10.0f, 10.0f, 1.0f};
+            vector4f result = v * m;
+            THEN("Expect translated position of a homogeneous vector")
             {
-                vector4f expected = {2.0f, 4.0f, 6.0f, 8.0f};
+                vector4f expected = {10.0f, 10.0f, 10.0f, 1.0f};
                 REQUIRE(result == expected);
             }
-        }*/
+        }
+        WHEN("Performing multiplication of a matrix and a matrix")
+        {
+            matrix4x4f m1 { 1.0f, 0.0f, 0.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f, 0.0f,
+                            10.0f, 10.0f, 10.0f, 1.0f};
+            matrix4x4f m2 { 1.0f, 0.0f, 0.0f, 0.0f,
+                            0.0f, 1.0f, 0.0f, 0.0f,
+                            0.0f, 0.0f, 1.0f, 0.0f,
+                            0.0f, 0.0f, 0.0f, 1.0f};
+            matrix4x4f result = m1 * m2;
+            THEN("Expect element wise negation of values")
+            {
+                matrix4x4f expected = { 1.0f, 0.0f, 0.0f, 0.0f,
+                                        0.0f, 1.0f, 0.0f, 0.0f,
+                                        0.0f, 0.0f, 1.0f, 0.0f,
+                                        10.0f, 10.0f, 10.0f, 1.0f};
+                REQUIRE(result == expected);
+            }
+        }
     }
 }
